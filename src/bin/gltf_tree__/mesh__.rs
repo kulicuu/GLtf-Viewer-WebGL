@@ -2,6 +2,7 @@ use std::sync::{Arc, Mutex};
 
 use gltf;
 
+use crate::gltf_tree__::math::*;
 use crate::gltf_tree__::root__::Root;
 use crate::gltf_tree__::primitive__::{
     Primitive, 
@@ -69,12 +70,18 @@ pub fn draw_mesh
 (
     gl: Arc<GL>,
     mesh: Arc<Mutex<Mesh>>,
+    model_matrix: &Matrix4,
+    mvp_matrix: &Matrix4,
+    camera_position: &Vector3,
 )
 {
     for primitive in &mesh.lock().unwrap().primitives {
         draw_primitive(
             gl.clone(),
             primitive.clone(),
+            &model_matrix,
+            mvp_matrix,
+            camera_position,
         )
     }
 

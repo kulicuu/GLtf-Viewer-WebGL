@@ -116,9 +116,15 @@ pub fn draw_node
 )
 {
     if let Some(ref mesh) = node.lock().unwrap().mesh {
+        let mut r = cam_params.lock().unwrap();
+        let final_transform = Matrix4::identity();
+        let mvp_matrix = r.projection_matrix * r.view_matrix;
         draw_mesh(
             gl.clone(),
             (*mesh).clone(),
+            &final_transform,
+            &mvp_matrix,
+            &r.position,
         );        
     }
     for node_id in &node.lock().unwrap().children {
