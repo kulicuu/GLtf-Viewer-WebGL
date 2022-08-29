@@ -290,6 +290,7 @@ fn per_frame_configure
     camera_position: &Vector3,
 )
 {
+    log!("Per frame configure.");
     let material = primitive.lock().unwrap().material.clone();
 
 
@@ -304,6 +305,7 @@ fn draw
     camera_position: &Vector3,
 )
 {
+    log!("Per frame draw call");
     per_frame_configure(
         gl.clone(),
         primitive.clone(),
@@ -311,5 +313,7 @@ fn draw
         mvp_matrix,
         camera_position,
     );
+
+    // gl.draw_elements...
 
 }

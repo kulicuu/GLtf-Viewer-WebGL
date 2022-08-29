@@ -12,7 +12,8 @@ use web_sys::{
 use cgmath::{ Deg, Point3 };
 use gloo_console::log;
 
-use crate::gltf_tree__::root__;
+use crate::gltf_tree__::root__::{create_root};
+use crate::gltf_tree__::scene__::{create_scene};
 
 
 pub struct ImportData {
@@ -38,9 +39,19 @@ pub fn prepare_gltf
         // )
     );
 
-    let root = root__::create_root(
-        gl.clone(),
-        import_data.clone(),
+    let root = 
+        create_root(
+            gl.clone(),
+            import_data.clone(),
+        );
+    
+
+
+    let scene_index = 0;
+
+    let scene = create_scene(
+        &import_data.doc.scenes().nth(scene_index).unwrap(),
+        root.clone(),
     );
     
 }

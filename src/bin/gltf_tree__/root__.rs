@@ -34,6 +34,7 @@ pub fn create_root
     gl: Arc<GL>,
     import_data: Arc<ImportData>,
 )
+-> Arc<Mutex<Root>>
 {
     let root = Arc::new(
         Mutex::new(
@@ -48,9 +49,6 @@ pub fn create_root
         )
     );
 
-
-    // log!("create root.", import_data.doc.nodes().len());
-    // let nodes: Vec<Arc<Mutex<Node>>> = import_data.doc.nodes()
     root.lock().unwrap().nodes = import_data.doc.nodes()
         .map(|g_node| {
             log!("here node.");
@@ -65,12 +63,5 @@ pub fn create_root
                 )
             )
         }).collect();
-        // let camera_nodes = root.lock().unwrap().nodes.iter()
-        //     .filter(|node| node.lock().unwrap().camera.is_some())
-        //     .map(|node| node.index)
-        //     .collect();
-
-
-
-
+    root.clone()
 }
