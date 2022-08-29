@@ -65,14 +65,12 @@ pub fn create_root
                 )
             )
         }).collect();
+        // let camera_nodes = root.lock().unwrap().nodes.iter()
+        //     .filter(|node| node.lock().unwrap().camera.is_some())
+        //     .map(|node| node.index)
+        //     .collect();
 
-        // let nodes: _ = import_data.doc.nodes()
-        // .map(|g_node| create_node(
-        //     gl.clone(),
-        //     &g_node,
-        //     root.clone(),
-        //     import_data,
-        // )
-        // ).collect();
+
+
 
 }

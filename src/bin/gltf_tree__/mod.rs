@@ -7,3 +7,5 @@ pub mod primitive__;
 pub mod material__;
 pub mod texture__;
 
+pub mod math;
+

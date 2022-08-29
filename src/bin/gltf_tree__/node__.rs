@@ -4,8 +4,12 @@ use std::sync::{Arc, Mutex};
 
 use crate::viewer__::ImportData;
 use crate::gltf_tree__::root__::Root;
+use crate::gltf_tree__::mesh__::{Mesh, create_mesh};
+use crate::gltf_tree__::math::*;
 
 use gltf;
+
+use gloo_console::log;
 
 
 use web_sys::{
@@ -15,13 +19,17 @@ use web_sys::{
     WebGlUniformLocation,
 };
 
-use cgmath::Matrix4;
+
+
+
+
+
 
 pub struct Node {
     // pub index: usize, // glTF index
-    // pub children: Vec<usize>,
+    pub children: Vec<usize>,
     // pub matrix: Matrix4<f32>,
-    // pub mesh: Option<Arc<Mesh>>,
+    pub mesh: Option<Arc<Mutex<Mesh>>>,
     // pub rotation: Quaternion,
     // pub scale: Vector3,
     // pub translation: Vector3,
@@ -44,6 +52,68 @@ pub fn create_node
 -> Node
 {
 
-    Node { }
+
+    let matrix = &g_node.transform().matrix();
+    let matrix: &Matrix4 = matrix.into();
+    let matrix = *matrix;
+
+    let (trans, gn_rot, scale) = g_node.transform().decomposed();
+    let r = gn_rot;
+    let rotation = Quaternion::new(r[3], r[0], r[1], r[2]);
+
+    
+    let mut mesh = None;
+    if let Some(g_mesh) = g_node.mesh() {
+        log!("gmesh.");
+        if let Some(existing_mesh) = root.lock().unwrap().meshes.iter().find(|mesh| mesh.lock().unwrap().index == g_mesh.index()) {
+            log!("existing mesh.");
+            mesh = Some(Arc::new(
+                Mutex::new(
+                    create_mesh()
+                )
+            ));
+        }
+        if mesh.is_none() {
+            mesh = Some(Arc::new(
+                Mutex::new(
+                    create_mesh()
+                )
+            ));
+        }
+    }
+
+    if mesh.is_none() {
+        root.lock().unwrap().meshes.push(mesh.clone().unwrap());
+    }
+
+
+
+    // let mesh = Arc::new(None);
+    // if let Some(g_mesh) = g_node.mesh() {
+    //     if let Some(existing_mesh) = root.lock().unwrap().meshes.iter().find(|mesh| mesh.lock().unwrap().index == g_mesh.index()) {
+    //         mesh = Some(Some(Arc::new(
+    //             Mutex::new(
+    //                 create_mesh()
+    //             )
+    //         )));
+    //     }
+    //     if mesh.is_none() {
+    //         mesh = Some(Arc::new(
+    //             Mutex::new(
+    //                 create_mesh()
+    //             )));
+    //         root.lock().unwrap().meshes.push(mesh.unwrap().clone());
+    //     }
+    // }
+    let children: Vec<_> = g_node.children()
+        .map(|g_node| g_node.index())
+        .collect();
+
+
+    Node {
+        children,
+        // mesh: mesh.clone(),
+        mesh: None,
+     }
 
 }
