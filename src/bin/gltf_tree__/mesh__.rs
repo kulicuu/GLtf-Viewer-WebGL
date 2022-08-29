@@ -1,8 +1,12 @@
 use std::sync::{Arc, Mutex};
 
 
+
 use gltf;
-use crate::gltf_tree__::primitive__::Primitive;
+
+use crate::gltf_tree__::root__::Root;
+use crate::gltf_tree__::primitive__::{Primitive, create_primitive};
+
 use crate::viewer__::ImportData;
 use gloo_console::log;
 
@@ -18,26 +22,27 @@ pub struct Mesh {
 pub fn create_mesh
 (
     g_mesh: Arc<gltf::Mesh>,
-    import_data: Arc<ImportData>,
+    import_data: Arc<Mutex<ImportData>>,
+    root: Arc<Mutex<Root>>,
 )
 -> Mesh
 {
 
-    // let primitives = g_mesh.primitives();
-
     let primitives: Vec<_>= g_mesh.primitives()
-    // let primitives: Vec<()> = g_mesh.primitives()
         .enumerate()
         .map(|(i, g_prim)| {
             log!("have a primitive in the mesh");
-            // Primitive::from_gltf(
-            //     gl.clone(),
-            //     &g_prim, 
-            //     i, 
-            //     g_mesh.index(), 
-            //     root, 
-            //     imp
-            // )
+            Arc::new(
+                Mutex::new(
+                    create_primitive(
+                        &g_prim,
+                        i,
+                        g_mesh.index(),
+                        root.clone(),
+                        import_data.clone(),
+                    )
+                )
+            )
         })
         .collect();
 

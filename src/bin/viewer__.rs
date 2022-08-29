@@ -2,7 +2,7 @@
 
 
 use gltf;
-use std::sync::{Arc};
+use std::sync::{Arc, Mutex};
 use web_sys::{
     HtmlCanvasElement, WebGl2RenderingContext as GL, 
     window, AngleInstancedArrays, KeyboardEvent,
@@ -33,7 +33,9 @@ pub fn prepare_gltf
     let (doc, buffers, images) = gltf::import_slice(raw).unwrap();
 
     let import_data = Arc::new(
-        ImportData { doc, buffers, images }
+        Mutex::new(
+            ImportData { doc, buffers, images }
+        )
     );
 
     let root = root__::create_root(
