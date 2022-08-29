@@ -63,29 +63,32 @@ pub fn create_node
 
     let mut mesh = None;
     if let Some(g_mesh) = g_node.mesh() {
+        let g_mesh = Arc::new(g_mesh);
         if let Some(existing_mesh) = root.lock().unwrap().meshes.iter().find(|mesh| mesh.lock().unwrap().index == g_mesh.index()) {
             log!("existing mesh.");
             mesh = Some(Arc::new(
                 Mutex::new(
-                    create_mesh()
+                    create_mesh(
+                        g_mesh.clone(),
+                    )
                 )
             ));
         }
         if mesh.is_none() {
             mesh = Some(Arc::new(
                 Mutex::new(
-                    create_mesh()
+                    create_mesh(
+                        g_mesh.clone(),
+                    )
                 )
             ));
         }
+
     }
-    if mesh.is_none() {
-        root.lock().unwrap().meshes.push(mesh.clone().unwrap());
-    }
+
     let children: Vec<_> = g_node.children()
         .map(|g_node| g_node.index())
         .collect();
-
 
     Node {
         children,
