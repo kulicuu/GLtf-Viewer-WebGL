@@ -5,7 +5,7 @@ use gltf;
 use gloo_console::log;
 
 use crate::gltf_tree__::root__::Root;
-use crate::gltf_tree__::material__::Material;
+use crate::gltf_tree__::material__::{Material, create_material};
 use crate::viewer__::ImportData;
 
 use crate::gltf_tree__::math::*;
@@ -179,12 +179,25 @@ pub fn create_primitive
     
     let g_material = g_primitive.material();
 
-    let mut material: Option<Material> = None;
+    let mut material: Option<Arc<Mutex<Material>>> = None;
     if let Some(mat) = root.lock().unwrap().materials.iter().find(
         |m|
         m.lock().unwrap().index == g_material.index()
     )
     {
+        log!("Found material in root.");
+        material = Some(mat.clone());
+    }
+
+    if material.is_none() {
+        log!("No material in root. To create:");
+        material = Some(Arc::new(Mutex::new(
+            create_material(
+                g_material,
+                root.clone(),
+            )
+        )));
+        root.lock().unwrap().materials.push(material.unwrap());
 
     }
 

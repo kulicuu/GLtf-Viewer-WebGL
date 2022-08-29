@@ -36,9 +36,13 @@ pub struct Material {
 
 pub fn create_material
 (
-    g_material: Arc<Mutex<gltf::material::Material>>,
+    g_material: gltf::material::Material,
     root: Arc<Mutex<Root>>,
 )
+-> Material
 {
+    Material {
+        index: Some(0),
+    }
     
 }
