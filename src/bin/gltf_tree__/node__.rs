@@ -89,8 +89,7 @@ pub fn create_node
 
     Node {
         children,
-        // mesh: mesh.clone(),
-        mesh: None,
+        mesh: mesh.clone(),
      }
 
 }

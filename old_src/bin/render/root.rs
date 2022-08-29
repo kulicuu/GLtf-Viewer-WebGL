@@ -49,22 +49,6 @@ impl Root {
         };
 
         log!("creating root");
-        // log!("imp.doc.nodes.len()", imp.doc.nodes().len());
-        // let ints: std::vec::Vec<u8> = imp.doc.nodes()
-        //     .map(|g_node| {
-        //         1
-        //     }).collect();
-        // log!("ints[0]", ints[0]);
-        // for g_node in imp.doc.nodes() {
-        //     log!("g_node", g_node.index());
-        //     // g_node.camera().unwrap();
-        //     // log!("g_node", g_node.camera().unwrap());
-        //     log!("children", g_node.children().len());
-        //     g_node.mesh().unwrap().primitives();
-        //     log!("primitives len", g_node.mesh().unwrap().primitives().len());
-        //     log!("one");
-        // }
-
         let nodes: Vec<Node> = imp.doc.nodes()
             .map(|g_node| Node::from_gltf(gl.clone(), &g_node, &mut root, imp))
             .collect();
