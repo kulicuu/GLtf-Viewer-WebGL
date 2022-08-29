@@ -1,13 +1,20 @@
 use std::sync::{Arc, Mutex};
 
-
-
 use gltf;
 
 use crate::gltf_tree__::root__::Root;
 use crate::gltf_tree__::primitive__::{Primitive, create_primitive};
 
 use crate::viewer__::ImportData;
+
+use web_sys::{
+    HtmlCanvasElement, WebGl2RenderingContext as GL, 
+    window, AngleInstancedArrays, KeyboardEvent,
+    EventTarget, WebGlBuffer, WebGlProgram,
+    WebGlUniformLocation,
+};
+
+
 use gloo_console::log;
 
 pub struct Mesh {
@@ -21,6 +28,7 @@ pub struct Mesh {
 
 pub fn create_mesh
 (
+    gl: Arc<GL>,
     g_mesh: Arc<gltf::Mesh>,
     import_data: Arc<ImportData>,
     root: Arc<Mutex<Root>>,
@@ -35,6 +43,7 @@ pub fn create_mesh
             Arc::new(
                 Mutex::new(
                     create_primitive(
+                        gl.clone(),
                         &g_prim,
                         i,
                         g_mesh.index(),

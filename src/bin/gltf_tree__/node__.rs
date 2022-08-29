@@ -66,6 +66,7 @@ pub fn create_node
             mesh = Some(Arc::new(
                 Mutex::new(
                     create_mesh(
+                        gl.clone(),
                         g_mesh.clone(),
                         import_data.clone(),
                         root.clone(),
@@ -77,6 +78,7 @@ pub fn create_node
             mesh = Some(Arc::new(
                 Mutex::new(
                     create_mesh(
+                        gl.clone(),
                         g_mesh.clone(),
                         import_data.clone(),
                         root.clone(),

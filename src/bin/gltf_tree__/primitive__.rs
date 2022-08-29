@@ -53,25 +53,20 @@ impl Default for Vertex {
 
 
 pub struct Primitive {
-    // gl: Arc<GL>,
+    gl: Arc<GL>,
     // // vao: u32,
     // // vbo: u32,
-    // // num_vertices: u32,
-
+    num_vertices: u32,
     // // ebo: Option<u32>,
-    // num_indices: u32,
-
-    // material: Rc<Material>,
-
-    // // pbr_shader: Rc<PbrShader>,
-    // pbr_shader: Arc<PbrShader>,
-
-    // // TODO!: mode, targets
+    num_indices: u32,
+    material: Arc<Mutex<Material>>,
+    pbr_shader: Arc<Mutex<PbrShader>>,
 }
 
 
 pub fn create_primitive
 (
+    gl: Arc<GL>,
     g_primitive: &gltf::Primitive,
     i: usize,
     idx: usize,
@@ -216,20 +211,59 @@ pub fn create_primitive
             Arc::new(Mutex::new(create_pbr_shader().into()))
         };
 
+    if new_shader {
+        root.lock().unwrap().shaders.insert(
+            shader_flags,
+            shader.clone(),
+        );
+    }
 
+    let num_indices = indices.as_ref().map(|i| i.len()).unwrap_or(0);
 
+    prepare_draw(
+        gl.clone(),
+        &vertices,
+        indices,
+    );
 
-
-
-
-
-    Primitive {}
+    Primitive {
+        gl: gl.clone(),
+        num_vertices: 10,
+        num_indices: 10,
+        material: material.clone(),
+        pbr_shader: shader.clone(),
+    }
 }
 
 
 fn prepare_draw
-()
+(
+    gl: Arc<GL>,
+    vertices: &[Vertex],
+    indices: Option<Vec<u32>>,
+)
 {
+    for vertex in vertices {
+        // log!("Vertex", vertex.position[1]);
+        log!("Vertex normal", vertex.normal[1]);
+        log!("Vertex tex", vertex.tex_coord_0[1]);
+    }
+
+
+    let mut vertices_positions = vec![];
+    for vertex in vertices {
+        vertices_positions.extend([vertex.position[0], vertex.position[1], vertex.position[2]].iter().copied());
+    }
+
+    let vertex_buffer = Arc::new(gl.create_buffer().unwrap());
+    let js_verts = js_sys::Float32Array::from(vertices_positions.as_slice());
+
+    let index_buffer = Arc::new(gl.create_buffer().unwrap());
+    let indices = indices.unwrap();
+    let js_indices = js_sys::Uint32Array::from(indices.as_slice());
+
+    // log!("indices.len", indices.unwrap().len());
+
 
 }
 
