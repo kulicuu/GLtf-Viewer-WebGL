@@ -243,38 +243,73 @@ fn prepare_draw
     indices: Option<Vec<u32>>,
 )
 {
-    for vertex in vertices {
-        // log!("Vertex", vertex.position[1]);
-        log!("Vertex normal", vertex.normal[1]);
-        log!("Vertex tex", vertex.tex_coord_0[1]);
-    }
-
-
     let mut vertices_positions = vec![];
+    let mut normals = vec![];
     for vertex in vertices {
         vertices_positions.extend([vertex.position[0], vertex.position[1], vertex.position[2]].iter().copied());
+        normals.extend([vertex.normal[0], vertex.normal[1], vertex.normal[2]].iter().copied());
     }
 
     let vertex_buffer = Arc::new(gl.create_buffer().unwrap());
     let js_verts = js_sys::Float32Array::from(vertices_positions.as_slice());
 
+    gl.bind_buffer(GL::ARRAY_BUFFER, Some(&vertex_buffer));
+    gl.buffer_data_with_array_buffer_view(GL::ARRAY_BUFFER, &js_verts, GL::STATIC_DRAW);
+    gl.vertex_attrib_pointer_with_i32(0 as u32, 3, GL::FLOAT, false, 0, 0);
+    gl.enable_vertex_attrib_array(0 as u32);
+
+    let normals_buffer = Arc::new(gl.create_buffer().unwrap());
+    let js_normals = js_sys::Float32Array::from(normals.as_slice());
+
+    gl.bind_buffer(GL::ARRAY_BUFFER, Some(&normals_buffer));
+    gl.buffer_data_with_array_buffer_view(GL::ARRAY_BUFFER, &js_normals, GL::STATIC_DRAW);
+    gl.vertex_attrib_pointer_with_i32(1 as u32, 3, GL::FLOAT, false, 0, 0);
+    gl.enable_vertex_attrib_array(1 as u32);
+
+
+
+
+
+
     let index_buffer = Arc::new(gl.create_buffer().unwrap());
     let indices = indices.unwrap();
     let js_indices = js_sys::Uint32Array::from(indices.as_slice());
 
-    // log!("indices.len", indices.unwrap().len());
-
+    gl.bind_buffer(GL::ELEMENT_ARRAY_BUFFER, Some(&index_buffer));
+    gl.buffer_data_with_array_buffer_view(GL::ELEMENT_ARRAY_BUFFER, &js_indices, GL::STATIC_DRAW);
 
 }
 
 fn per_frame_configure
-()
+(
+    gl: Arc<GL>,
+    primitive: Arc<Mutex<Primitive>>,
+    
+    model_matrix: &Matrix4,
+    mvp_matrix: &Matrix4,
+    camera_position: &Vector3,
+)
 {
+    let material = primitive.lock().unwrap().material.clone();
+
 
 }
 
 fn draw
-()
+(
+    gl: Arc<GL>,
+    primitive: Arc<Mutex<Primitive>>,
+    model_matrix: &Matrix4,
+    mvp_matrix: &Matrix4,
+    camera_position: &Vector3,
+)
 {
+    per_frame_configure(
+        gl.clone(),
+        primitive.clone(),
+        model_matrix,
+        mvp_matrix,
+        camera_position,
+    );
 
 }
