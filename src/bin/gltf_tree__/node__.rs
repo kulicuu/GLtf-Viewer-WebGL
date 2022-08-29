@@ -70,6 +70,7 @@ pub fn create_node
                 Mutex::new(
                     create_mesh(
                         g_mesh.clone(),
+                        import_data.clone(),
                     )
                 )
             ));
@@ -79,6 +80,7 @@ pub fn create_node
                 Mutex::new(
                     create_mesh(
                         g_mesh.clone(),
+                        import_data.clone(),
                     )
                 )
             ));
