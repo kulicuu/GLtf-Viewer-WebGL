@@ -5,6 +5,8 @@ mod viewer__;
 mod gltf_tree__;
 mod shader__;
 
+use crate::gltf_tree__::scene__::draw_scene;
+
 use web_sys::{
     HtmlCanvasElement, WebGl2RenderingContext as GL, 
     window, AngleInstancedArrays, KeyboardEvent,
@@ -52,7 +54,7 @@ fn main()
 
 
 
-    viewer__::prepare_gltf(gl.clone());
+    let (root, scene) = viewer__::prepare_gltf(gl.clone());
 
 
 
@@ -77,6 +79,11 @@ fn main()
 
         gl.clear(GL::COLOR_BUFFER_BIT);
 
+        draw_scene(
+            gl.clone(),
+            root.clone(),
+            scene.clone(),
+        );
 
         request_animation_frame(render_loop_closure.borrow().as_ref().unwrap());
     }) as Box<dyn FnMut()>));

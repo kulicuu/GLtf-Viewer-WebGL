@@ -12,8 +12,8 @@ use web_sys::{
 use cgmath::{ Deg, Point3 };
 use gloo_console::log;
 
-use crate::gltf_tree__::root__::{create_root};
-use crate::gltf_tree__::scene__::{create_scene};
+use crate::gltf_tree__::root__::{create_root, Root};
+use crate::gltf_tree__::scene__::{create_scene, Scene};
 
 
 pub struct ImportData {
@@ -28,6 +28,7 @@ pub fn prepare_gltf
 (
     gl: Arc<GL>,
 )
+-> (Arc<Mutex<Root>>, Arc<Mutex<Scene>>)
 {
     log!("Prepare Gltf.");
     let raw = include_bytes!("../../assets/Stork.glb");
@@ -49,9 +50,18 @@ pub fn prepare_gltf
 
     let scene_index = 0;
 
-    let scene = create_scene(
-        &import_data.doc.scenes().nth(scene_index).unwrap(),
+    let scene = 
+    Arc::new(Mutex::new(
+        create_scene(
+            &import_data.doc.scenes().nth(scene_index).unwrap(),
+            root.clone(),
+        )
+    ));
+
+
+    (
         root.clone(),
-    );
+        scene.clone(),
+    )
     
 }

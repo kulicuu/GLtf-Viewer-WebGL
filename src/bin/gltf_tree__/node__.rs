@@ -99,3 +99,10 @@ pub fn create_node
      }
 
 }
+
+
+pub fn draw_node
+(
+    gl: Arc<GL>,
+)
+{}
