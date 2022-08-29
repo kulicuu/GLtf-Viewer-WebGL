@@ -32,7 +32,7 @@ pub struct Root {
 pub fn create_root
 (
     gl: Arc<GL>,
-    import_data: Arc<Mutex<ImportData>>,
+    import_data: Arc<ImportData>,
 )
 {
     let root = Arc::new(
@@ -49,9 +49,9 @@ pub fn create_root
     );
 
 
-    log!("create root.", import_data.lock().unwrap().doc.nodes().len());
+    // log!("create root.", import_data.doc.nodes().len());
     // let nodes: Vec<Arc<Mutex<Node>>> = import_data.doc.nodes()
-    root.lock().unwrap().nodes = import_data.lock().unwrap().doc.nodes()
+    root.lock().unwrap().nodes = import_data.doc.nodes()
         .map(|g_node| {
             log!("here node.");
             Arc::new(

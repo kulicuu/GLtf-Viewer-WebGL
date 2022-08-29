@@ -33,9 +33,9 @@ pub fn prepare_gltf
     let (doc, buffers, images) = gltf::import_slice(raw).unwrap();
 
     let import_data = Arc::new(
-        Mutex::new(
+        // Mutex::new(
             ImportData { doc, buffers, images }
-        )
+        // )
     );
 
     let root = root__::create_root(

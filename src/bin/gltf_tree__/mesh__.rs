@@ -22,7 +22,7 @@ pub struct Mesh {
 pub fn create_mesh
 (
     g_mesh: Arc<gltf::Mesh>,
-    import_data: Arc<Mutex<ImportData>>,
+    import_data: Arc<ImportData>,
     root: Arc<Mutex<Root>>,
 )
 -> Mesh

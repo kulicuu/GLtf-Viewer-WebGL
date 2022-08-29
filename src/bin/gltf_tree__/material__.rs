@@ -9,7 +9,7 @@ use gloo_console::log;
 
 pub struct Material {
     // gl: Arc<GL>,
-    // pub index: Option<usize>, /// glTF index
+    pub index: Option<usize>, 
     // pub name: Option<String>,
 
     // // pbr_metallic_roughness properties
