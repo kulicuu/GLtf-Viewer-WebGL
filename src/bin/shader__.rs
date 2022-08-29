@@ -29,6 +29,16 @@ bitflags! {
     }
 }
 
+impl ShaderFlags {
+    pub fn as_strings(&self) -> Vec<String> {
+        (0..15)
+            .map(|i| 1u16 << i)
+            .filter(|i| self.bits & i != 0)
+            .map(|i| format!("{:?}", ShaderFlags::from_bits_truncate(i)))
+            .collect()
+    }
+}
+
 pub struct PbrShader {
     pub shader: Arc<WebGlProgram>,
     // pub shader: WebGlProgram,

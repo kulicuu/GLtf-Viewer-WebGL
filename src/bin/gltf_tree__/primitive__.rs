@@ -198,6 +198,11 @@ pub fn create_primitive
             )
         )));
         root.lock().unwrap().materials.push(material.unwrap());
+        // let material_2 = material.unwrap();
+
+        // shader_flags |= material_2.lock().unwrap())).shader_flags();
+        // shader_flags |= material.unwrap().lock().unwrap().shader_flags();
+
 
     }
 
