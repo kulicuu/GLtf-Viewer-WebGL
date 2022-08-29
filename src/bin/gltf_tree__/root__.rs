@@ -21,7 +21,7 @@ pub struct Root {
     pub materials: Vec<Arc<Mutex<Material>>>,
     // pub textures: Vec<Arc<Mutex<Texture>>>,
     
-    // pub shaders: HashMap<ShaderFlags, Arc<Mutex<PbrShader>>>,
+    pub shaders: HashMap<ShaderFlags, Arc<Mutex<PbrShader>>>,
     // pub camera_nodes: Vec<usize>, //indices of cameras
 
     // TODO!: joint_nodes, mesh_nodes?
@@ -42,7 +42,7 @@ pub fn create_root
                 meshes: vec![],
                 materials: vec![],
                 // textures: vec![],
-                // shaders: HashMap::new(),
+                shaders: HashMap::new(),
                 // camera_nodes: vec![],
             }
         )

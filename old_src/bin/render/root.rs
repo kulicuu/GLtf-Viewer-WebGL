@@ -30,7 +30,7 @@ pub struct Root {
     pub meshes: Vec<Rc<Mesh>>, 
     pub textures: Vec<Rc<Texture>>,
     pub materials: Vec<Rc<Material>>,
-    pub shaders: HashMap<ShaderFlags, Arc<PbrShader>>,
+    pub shaders: HashMap<ShaderFlags, Arc<Mutex<PbrShader>>>,
 
     pub camera_nodes: Vec<usize>, // indices of camera nodes
     // TODO!: joint_nodes, mesh_nodes?

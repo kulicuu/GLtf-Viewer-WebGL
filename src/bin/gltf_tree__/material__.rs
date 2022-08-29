@@ -38,7 +38,7 @@ pub struct Material {
 }
 
 
-pub fn shader_flags(
+pub fn create_shader_flags(
     material: Arc<Mutex<Material>>,
 )
 -> ShaderFlags

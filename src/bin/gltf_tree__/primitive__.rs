@@ -5,7 +5,11 @@ use gltf;
 use gloo_console::log;
 
 use crate::gltf_tree__::root__::Root;
-use crate::gltf_tree__::material__::{Material, create_material};
+use crate::gltf_tree__::material__::{
+    Material,
+    create_material,
+    create_shader_flags,
+};
 use crate::viewer__::ImportData;
 
 use crate::gltf_tree__::math::*;
@@ -197,16 +201,20 @@ pub fn create_primitive
                 root.clone(),
             )
         )));
-        root.lock().unwrap().materials.push(material.unwrap());
-        // let material_2 = material.unwrap();
+        root.lock().unwrap().materials.push(material.clone().unwrap());
+    };
+    
+    let material = material.unwrap();
+    shader_flags |= create_shader_flags(material.clone());
 
-        // shader_flags |= material_2.lock().unwrap())).shader_flags();
-        // shader_flags |= material.unwrap().lock().unwrap().shader_flags();
-
-
-    }
-
-
+    let mut new_shader = false;
+    let shader = 
+        if let Some(shader) = root.lock().unwrap().shaders.get(&shader_flags) {
+            shader.clone()
+        } else {
+            new_shader = true;
+            Arc::new(Mutex::new(create_pbr_shader().into()))
+        };
 
 
 

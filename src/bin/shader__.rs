@@ -40,10 +40,9 @@ impl ShaderFlags {
 }
 
 pub struct PbrShader {
-    pub shader: Arc<WebGlProgram>,
-    // pub shader: WebGlProgram,
-    pub flags: ShaderFlags,
-    pub uniform_locations: PbrUniformLocations,
+    // pub shader: Arc<WebGlProgram>,
+    // pub flags: ShaderFlags,
+    // pub uniform_locations: PbrUniformLocations,
 }
 
 #[allow(non_snake_case)]
@@ -83,4 +82,11 @@ pub struct PbrUniformLocations {
     // pub u_ScaleDiffBaseMR: WebGlUniformLocation,
     // pub u_ScaleFGDSpec: WebGlUniformLocation,
     // pub u_ScaleIBLAmbient: WebGlUniformLocation,
+}
+
+pub fn create_pbr_shader
+()
+-> PbrShader
+{
+    PbrShader {}
 }
