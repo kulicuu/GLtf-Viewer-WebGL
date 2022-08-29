@@ -61,10 +61,8 @@ pub fn create_node
     let r = gn_rot;
     let rotation = Quaternion::new(r[3], r[0], r[1], r[2]);
 
-    
     let mut mesh = None;
     if let Some(g_mesh) = g_node.mesh() {
-        log!("gmesh.");
         if let Some(existing_mesh) = root.lock().unwrap().meshes.iter().find(|mesh| mesh.lock().unwrap().index == g_mesh.index()) {
             log!("existing mesh.");
             mesh = Some(Arc::new(
@@ -81,30 +79,9 @@ pub fn create_node
             ));
         }
     }
-
     if mesh.is_none() {
         root.lock().unwrap().meshes.push(mesh.clone().unwrap());
     }
-
-
-
-    // let mesh = Arc::new(None);
-    // if let Some(g_mesh) = g_node.mesh() {
-    //     if let Some(existing_mesh) = root.lock().unwrap().meshes.iter().find(|mesh| mesh.lock().unwrap().index == g_mesh.index()) {
-    //         mesh = Some(Some(Arc::new(
-    //             Mutex::new(
-    //                 create_mesh()
-    //             )
-    //         )));
-    //     }
-    //     if mesh.is_none() {
-    //         mesh = Some(Arc::new(
-    //             Mutex::new(
-    //                 create_mesh()
-    //             )));
-    //         root.lock().unwrap().meshes.push(mesh.unwrap().clone());
-    //     }
-    // }
     let children: Vec<_> = g_node.children()
         .map(|g_node| g_node.index())
         .collect();
