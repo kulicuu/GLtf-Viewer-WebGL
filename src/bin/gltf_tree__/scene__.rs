@@ -4,7 +4,7 @@ use gltf;
 
 use crate::gltf_tree__::root__::Root;
 use crate::gltf_tree__::node__::draw_node;
-
+use crate::controls::{CameraParams};
 use crate::gltf_tree__::math::*;
 
 pub struct Scene {
@@ -43,10 +43,14 @@ pub fn create_scene
         ..Default::default()
     };
 
+    scene.nodes = g_scene.nodes()
+        .map(|g_node| g_node.index())
+        .collect();
+
+    log!("scene.nodes.len()", scene.nodes.len());
 
 
-
-    Scene::default()
+    scene
 }
 
 
@@ -55,14 +59,16 @@ pub fn draw_scene
     gl: Arc<GL>,
     root: Arc<Mutex<Root>>,
     scene: Arc<Mutex<Scene>>,
-    // camera_params: 
+    cam_params: Arc<Mutex<CameraParams>>,
 )
 {
     for node_id in &scene.lock().unwrap().nodes {
         let node = root.lock().unwrap().nodes[*node_id].clone();
         draw_node(
             gl.clone(),
+            root.clone(),
+            node,
+            cam_params.clone(),
         );
     }
-
 }

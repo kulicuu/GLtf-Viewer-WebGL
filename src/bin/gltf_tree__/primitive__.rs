@@ -296,23 +296,23 @@ fn per_frame_configure
 
 }
 
-fn draw
+pub fn draw_primitive
 (
     gl: Arc<GL>,
     primitive: Arc<Mutex<Primitive>>,
-    model_matrix: &Matrix4,
-    mvp_matrix: &Matrix4,
-    camera_position: &Vector3,
+    // model_matrix: &Matrix4,
+    // mvp_matrix: &Matrix4,
+    // camera_position: &Vector3,
 )
 {
-    log!("Per frame draw call");
-    per_frame_configure(
-        gl.clone(),
-        primitive.clone(),
-        model_matrix,
-        mvp_matrix,
-        camera_position,
-    );
+
+    // per_frame_configure(
+    //     gl.clone(),
+    //     primitive.clone(),
+    //     model_matrix,
+    //     mvp_matrix,
+    //     camera_position,
+    // );
 
     // gl.draw_elements...
 

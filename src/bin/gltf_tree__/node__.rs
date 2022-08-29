@@ -4,9 +4,10 @@ use std::sync::{Arc, Mutex};
 
 use crate::viewer__::ImportData;
 use crate::gltf_tree__::root__::Root;
-use crate::gltf_tree__::mesh__::{Mesh, create_mesh};
-use crate::gltf_tree__::math::*;
+use crate::gltf_tree__::mesh__::{Mesh, create_mesh, draw_mesh};
 
+use crate::gltf_tree__::math::*;
+use crate::controls::{CameraParams};
 use gltf;
 
 use gloo_console::log;
@@ -23,9 +24,9 @@ use web_sys::{
 
 
 pub struct Node {
-    // pub index: usize, // glTF index
+    pub index: usize, // glTF index
     pub children: Vec<usize>,
-    // pub matrix: Matrix4<f32>,
+    pub matrix: Matrix4,
     pub mesh: Option<Arc<Mutex<Mesh>>>,
     // pub rotation: Quaternion,
     // pub scale: Vector3,
@@ -45,6 +46,8 @@ pub fn create_node
     g_node: &gltf::Node,
     root: Arc<Mutex<Root>>,
     import_data: Arc<ImportData>,
+
+
 )
 -> Node
 {
@@ -94,7 +97,9 @@ pub fn create_node
         .collect();
 
     Node {
+        index: g_node.index(),
         children,
+        matrix,
         mesh: mesh.clone(),
      }
 
@@ -104,5 +109,25 @@ pub fn create_node
 pub fn draw_node
 (
     gl: Arc<GL>,
+    root: Arc<Mutex<Root>>,
+    node: Arc<Mutex<Node>>,
+    cam_params: Arc<Mutex<CameraParams>>,
+
 )
-{}
+{
+    if let Some(ref mesh) = node.lock().unwrap().mesh {
+        draw_mesh(
+            gl.clone(),
+            (*mesh).clone(),
+        );        
+    }
+    for node_id in &node.lock().unwrap().children {
+        let node = root.lock().unwrap().nodes[*node_id].clone();
+        draw_node(
+            gl.clone(),
+            root.clone(),
+            node,
+            cam_params.clone(),
+        );
+    }
+}

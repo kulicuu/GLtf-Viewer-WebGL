@@ -4,8 +4,10 @@ mod utils;
 mod viewer__;
 mod gltf_tree__;
 mod shader__;
+mod controls;
 
 use crate::gltf_tree__::scene__::draw_scene;
+use crate::controls::get_cam_params;
 
 use web_sys::{
     HtmlCanvasElement, WebGl2RenderingContext as GL, 
@@ -54,8 +56,11 @@ fn main()
 
 
 
-    let (root, scene) = viewer__::prepare_gltf(gl.clone());
+    let (root, scene, orbit_controls) = viewer__::prepare_gltf(gl.clone());
 
+    let cam_params = Arc::new(Mutex::new(
+        orbit_controls.lock().unwrap().camera_params()
+    ));
 
 
 
@@ -79,10 +84,13 @@ fn main()
 
         gl.clear(GL::COLOR_BUFFER_BIT);
 
+        *cam_params.lock().unwrap() = orbit_controls.lock().unwrap().camera_params();
+
         draw_scene(
             gl.clone(),
             root.clone(),
             scene.clone(),
+            cam_params.clone(),
         );
 
         request_animation_frame(render_loop_closure.borrow().as_ref().unwrap());

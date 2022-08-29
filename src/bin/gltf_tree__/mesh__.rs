@@ -3,7 +3,11 @@ use std::sync::{Arc, Mutex};
 use gltf;
 
 use crate::gltf_tree__::root__::Root;
-use crate::gltf_tree__::primitive__::{Primitive, create_primitive};
+use crate::gltf_tree__::primitive__::{
+    Primitive, 
+    create_primitive, 
+    draw_primitive
+};
 
 use crate::viewer__::ImportData;
 
@@ -13,7 +17,6 @@ use web_sys::{
     EventTarget, WebGlBuffer, WebGlProgram,
     WebGlUniformLocation,
 };
-
 
 use gloo_console::log;
 
@@ -58,6 +61,21 @@ pub fn create_mesh
     // log!("primitives.len() ", primitives.len());
     Mesh {
         index: 0,
-        primitives: vec![],
+        primitives,
     }
+}
+
+pub fn draw_mesh
+(
+    gl: Arc<GL>,
+    mesh: Arc<Mutex<Mesh>>,
+)
+{
+    for primitive in &mesh.lock().unwrap().primitives {
+        draw_primitive(
+            gl.clone(),
+            primitive.clone(),
+        )
+    }
+
 }
