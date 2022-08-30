@@ -7,13 +7,7 @@ use crate::gltf_tree__::node__::draw_node;
 use crate::controls::{CameraParams};
 use crate::gltf_tree__::math::*;
 
-pub struct Scene {
-    pub name: Option<String>,
-    pub nodes: Vec<usize>,
-}
-
 use gloo_console::log;
-
 
 use web_sys::{
     HtmlCanvasElement, WebGl2RenderingContext as GL, 
@@ -21,6 +15,11 @@ use web_sys::{
     EventTarget, WebGlBuffer, WebGlProgram,
     WebGlUniformLocation,
 };
+
+pub struct Scene {
+    pub name: Option<String>,
+    pub nodes: Vec<usize>,
+}
 
 impl Default for Scene {
     fn default() -> Self {
@@ -42,17 +41,12 @@ pub fn create_scene
         name: g_scene.name().map(|s| s.to_owned()),
         ..Default::default()
     };
-
     scene.nodes = g_scene.nodes()
         .map(|g_node| g_node.index())
         .collect();
-
     log!("scene.nodes.len()", scene.nodes.len());
-
-
     scene
 }
-
 
 pub fn draw_scene
 (
@@ -63,11 +57,10 @@ pub fn draw_scene
 )
 {
     for node_id in &scene.lock().unwrap().nodes {
-        let node = root.lock().unwrap().nodes[*node_id].clone();
         draw_node(
             gl.clone(),
             root.clone(),
-            node,
+            root.lock().unwrap().nodes[*node_id].clone(),
             cam_params.clone(),
         );
     }

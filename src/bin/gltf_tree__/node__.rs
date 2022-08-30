@@ -35,8 +35,7 @@ pub struct Node {
     // // weights_id: usize,
     // pub camera: Option<Camera>,
     // pub name: Option<String>,
-
-    // pub final_transform: Matrix4, // including parent transforms
+    pub final_transform: Matrix4, // including parent transforms
     // // pub bounds: Aabb3,
 }
 
@@ -46,13 +45,9 @@ pub fn create_node
     g_node: &gltf::Node,
     root: Arc<Mutex<Root>>,
     import_data: Arc<ImportData>,
-
-
 )
 -> Node
 {
-
-
     let matrix = &g_node.transform().matrix();
     let matrix: &Matrix4 = matrix.into();
     let matrix = *matrix;
@@ -65,7 +60,6 @@ pub fn create_node
     if let Some(g_mesh) = g_node.mesh() {
         let g_mesh = Arc::new(g_mesh);
         if let Some(existing_mesh) = root.lock().unwrap().meshes.iter().find(|mesh| mesh.lock().unwrap().index == g_mesh.index()) {
-            log!("existing mesh.");
             mesh = Some(Arc::new(
                 Mutex::new(
                     create_mesh(
@@ -89,7 +83,6 @@ pub fn create_node
                 )
             ));
         }
-
     }
 
     let children: Vec<_> = g_node.children()
@@ -101,8 +94,8 @@ pub fn create_node
         children,
         matrix,
         mesh: mesh.clone(),
+        final_transform: Matrix4::identity(),
      }
-
 }
 
 
@@ -115,9 +108,9 @@ pub fn draw_node
 
 )
 {
+    let final_transform = node.lock().unwrap().final_transform;
     if let Some(ref mesh) = node.lock().unwrap().mesh {
         let mut r = cam_params.lock().unwrap();
-        let final_transform = Matrix4::identity();
         let mvp_matrix = r.projection_matrix * r.view_matrix;
         draw_mesh(
             gl.clone(),
@@ -128,11 +121,10 @@ pub fn draw_node
         );        
     }
     for node_id in &node.lock().unwrap().children {
-        let node = root.lock().unwrap().nodes[*node_id].clone();
         draw_node(
             gl.clone(),
             root.clone(),
-            node,
+            root.lock().unwrap().nodes[*node_id].clone(),
             cam_params.clone(),
         );
     }

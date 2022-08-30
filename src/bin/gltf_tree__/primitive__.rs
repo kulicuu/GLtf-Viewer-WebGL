@@ -266,18 +266,12 @@ fn prepare_draw
     gl.vertex_attrib_pointer_with_i32(1 as u32, 3, GL::FLOAT, false, 0, 0);
     gl.enable_vertex_attrib_array(1 as u32);
 
-
-
-
-
-
     let index_buffer = Arc::new(gl.create_buffer().unwrap());
     let indices = indices.unwrap();
     let js_indices = js_sys::Uint32Array::from(indices.as_slice());
 
     gl.bind_buffer(GL::ELEMENT_ARRAY_BUFFER, Some(&index_buffer));
     gl.buffer_data_with_array_buffer_view(GL::ELEMENT_ARRAY_BUFFER, &js_indices, GL::STATIC_DRAW);
-
 }
 
 fn per_frame_configure

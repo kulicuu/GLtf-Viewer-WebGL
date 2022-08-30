@@ -7,27 +7,24 @@ use web_sys::{
     EventTarget, WebGlBuffer, WebGlProgram,
     WebGlUniformLocation,
 };
+use gloo_console::log;
 use crate::viewer__::ImportData;
 use crate::gltf_tree__::node__::{Node, create_node};
 use crate::gltf_tree__::mesh__::Mesh;
-use crate::gltf_tree__::material__::Material;
-
+use crate::gltf_tree__::material__::{Material};
+use crate::gltf_tree__::texture__::{Texture};
 use crate::shader__::{ShaderFlags, PbrShader};
-use gloo_console::log;
+
 
 pub struct Root {
     pub nodes: Vec<Arc<Mutex<Node>>>,
     pub meshes: Vec<Arc<Mutex<Mesh>>>, 
     pub materials: Vec<Arc<Mutex<Material>>>,
-    // pub textures: Vec<Arc<Mutex<Texture>>>,
-    
+    pub textures: Vec<Arc<Mutex<Texture>>>,    
     pub shaders: HashMap<ShaderFlags, Arc<Mutex<PbrShader>>>,
-    // pub camera_nodes: Vec<usize>, //indices of cameras
-
+    pub camera_nodes: Vec<usize>, //indices of cameras
     // TODO!: joint_nodes, mesh_nodes?
 }
-
-
 
 pub fn create_root
 (
@@ -42,16 +39,16 @@ pub fn create_root
                 nodes: vec![],
                 meshes: vec![],
                 materials: vec![],
-                // textures: vec![],
+                textures: vec![],
                 shaders: HashMap::new(),
-                // camera_nodes: vec![],
+                camera_nodes: vec![],
             }
         )
     );
 
     root.lock().unwrap().nodes = import_data.doc.nodes()
         .map(|g_node| {
-            log!("here node.");
+            log!("Node in root nodes map.");
             Arc::new(
                 Mutex::new(
                     create_node(

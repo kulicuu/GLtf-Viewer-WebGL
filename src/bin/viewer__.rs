@@ -1,6 +1,3 @@
-
-
-
 use gltf;
 use std::sync::{Arc, Mutex};
 use web_sys::{
@@ -18,13 +15,11 @@ use crate::gltf_tree__::math::*;
 use crate::controls::{OrbitControls};
 use crate::gltf_tree__::camera__::Camera;
 
-
 pub struct ImportData {
     pub doc: gltf::Document,
     pub buffers: Vec<gltf::buffer::Data>,
     pub images: Vec<gltf::image::Data>,
 }
-
 
 pub struct CameraOptions {
     pub index: i32,
@@ -33,7 +28,6 @@ pub struct CameraOptions {
     pub fovy: Deg<f32>,
     pub straight: bool,
 }
-
 
 pub fn prepare_gltf
 (
@@ -50,9 +44,7 @@ pub fn prepare_gltf
     let (doc, buffers, images) = gltf::import_slice(raw).unwrap();
 
     let import_data = Arc::new(
-        // Mutex::new(
             ImportData { doc, buffers, images }
-        // )
     );
 
     let camera_options = CameraOptions {
@@ -68,9 +60,7 @@ pub fn prepare_gltf
         // inner_size,
     );
     orbit_controls.camera = Camera::default();
-
     orbit_controls.camera.fovy = camera_options.fovy;
-
     let orbit_controls = Arc::new(Mutex::new(
         orbit_controls,
     ));
@@ -80,8 +70,8 @@ pub fn prepare_gltf
         import_data.clone(),
     );
     
+    // Only drawing one scene.  Default scene.
     let scene_index = 0;
-
     let scene = 
     Arc::new(Mutex::new(
         create_scene(
