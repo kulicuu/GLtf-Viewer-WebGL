@@ -1,24 +1,19 @@
 use std::sync::{Arc, Mutex};
-
 use gltf;
-
+use crate::viewer__::ImportData;
 use crate::gltf_tree__::math::*;
 use crate::gltf_tree__::root__::Root;
 use crate::gltf_tree__::primitive__::{
-    Primitive, 
-    create_primitive, 
+    Primitive,
+    create_primitive,
     draw_primitive
 };
-
-use crate::viewer__::ImportData;
-
 use web_sys::{
-    HtmlCanvasElement, WebGl2RenderingContext as GL, 
+    HtmlCanvasElement, WebGl2RenderingContext as GL,
     window, AngleInstancedArrays, KeyboardEvent,
     EventTarget, WebGlBuffer, WebGlProgram,
     WebGlUniformLocation,
 };
-
 use gloo_console::log;
 
 pub struct Mesh {
@@ -58,7 +53,6 @@ pub fn create_mesh
             )
         })
         .collect();
-
     // log!("primitives.len() ", primitives.len());
     Mesh {
         index: 0,
@@ -84,5 +78,4 @@ pub fn draw_mesh
             camera_position,
         )
     }
-
 }

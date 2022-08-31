@@ -1,8 +1,6 @@
 use std::rc::Rc;
 use std::path::Path;
-
 use gltf;
-
 use web_sys::{
     HtmlCanvasElement, WebGl2RenderingContext as GL, 
     window, AngleInstancedArrays, KeyboardEvent,
@@ -10,11 +8,8 @@ use web_sys::{
     WebGlUniformLocation,
 };
 
-
 use gloo_console::log;
-
 use std::sync::Arc;
-
 use collision::{Aabb, Union};
 
 use crate::controls::CameraParams;
@@ -24,10 +19,6 @@ use crate::render::root::Root;
 use crate::render::camera::Camera;
 // use crate::import_data::ImportData;
 use crate::render::texture::ImportData;
-
-
-
-
 
 pub struct Node {
     pub index: usize, // glTF index
@@ -59,10 +50,7 @@ impl Node {
 
     ) -> Node {
         // convert matrix in 3 steps due to type system weirdness
-
         log!("creating node");
-
-
         let matrix = &g_node.transform().matrix();
         let matrix: &Matrix4 = matrix.into();
         let matrix = *matrix;

@@ -1,4 +1,3 @@
-
 use std::sync::{Arc, Mutex};
 use std::collections::HashMap;
 use web_sys::{
@@ -14,7 +13,6 @@ use crate::gltf_tree__::mesh__::Mesh;
 use crate::gltf_tree__::material__::{Material};
 use crate::gltf_tree__::texture__::{Texture};
 use crate::shader__::{ShaderFlags, PbrShader};
-
 
 pub struct Root {
     pub nodes: Vec<Arc<Mutex<Node>>>,
@@ -45,7 +43,6 @@ pub fn create_root
             }
         )
     );
-
     root.lock().unwrap().nodes = import_data.doc.nodes()
         .map(|g_node| {
             log!("Node in root nodes map.");
